@@ -1,5 +1,33 @@
+ 
 const {JSDOM} = require('jsdom')
 //gives us a way in node to access to the DOM ("Document Model") API 
+
+async function crawlPage(currentURL){
+    console.log(`actively crwaling: ${currentURL}`);
+
+    try {
+        const resp = await fetch(currentURL)
+
+        if(resp.status > 399){
+            console.log(`error in fetch with status code ${resp.status} 
+            on page ${currentURL}`)
+            return 
+        }
+
+        const contentType = resp.headers.get("content-type")
+        if (!contentType.includes("text/html")){
+            console.log(`non html response, content type ${resp.status} 
+            on page ${currentURL}`)
+            return 
+        }
+
+        console.log(await resp.text());
+     // .text() gets body from HTML becasue HTML body is TEXT
+    } catch (err){
+        console.log(`error in fetch : ${err.message}, on page ${currentURL}`)
+    }
+    // the WHOLE POINT OF ERR CATCHING IS TO MAKE IT CLEARER!!! NOT FIX
+}
 
 function getURLsFromHTML(htmlBody, baseURL){
     const urls = []
@@ -47,5 +75,6 @@ function normalizeURL(urlString){
 
 module.exports ={
     normalizeURL,
-    getURLsFromHTML
+    getURLsFromHTML,
+    crawlPage
 }
