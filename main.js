@@ -1,7 +1,8 @@
 // <process.argv>
 //This grabs the commandLine arguemnts
-
 const {crawlPage} = require("./crawl.js")
+const {printReport} = require("./report.js")
+
 
 async function main() {
     if (process.argv.length < 3){
@@ -32,9 +33,7 @@ wagslane.dev
     console.log(`starting crawl ${baseURL}`)
     const pages = await crawlPage(baseURL, baseURL, {})
     // because we start at the homepage and the current page will be homepage
-    for (const page of Object.entries(pages)){
-        console.log(page)
-    }
+    printReport(pages)
 }
 
 main()
